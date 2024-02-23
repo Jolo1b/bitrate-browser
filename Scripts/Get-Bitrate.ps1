@@ -1,15 +1,13 @@
 function Get-Bitrate {
     param($pathToDir)
     
+    # verify if the specified folder exists
     if(-not (Test-Path $pathToDir -PathType Container)){
         Write-Host "Error: invalid path"
         return 0
     }
 
-    if($null -eq $minBitrate){
-        $minBitrate = 0
-    }
-
+    # create objects
     $shell = New-Object -ComObject Shell.Application
     $AllMp3 = Get-ChildItem $pathToDir -Recurse -Filter *.mp3
 
