@@ -13,12 +13,7 @@ function Get-Bitrate {
 
     [int] $bitrateAttribute = 0
 
-    $filesPropertyObject = New-Object -TypeName PSCustomObject -Property @{
-        Bitrate = New-Object System.Collections.ArrayList
-        Name = New-Object System.Collections.ArrayList
-        Path = New-Object System.Collections.ArrayList
-        Size = New-Object System.Collections.ArrayList
-    }
+    $filesPropertyObject = @()
 
     foreach($file in $AllMp3){
         $dirObject = $shell.NameSpace($file.Directory.FullName)
@@ -34,10 +29,12 @@ function Get-Bitrate {
         else { [int] $bitrate = -1 }
 
         if($bitrate -ne -1){
-            $filesPropertyObject.Bitrate += $bitrate
-            $filesPropertyObject.Name += $file.Name
-            $filesPropertyObject.Path += $file.FullName
-            $filesPropertyObject.Size += $fileObject.Size
+            $filesPropertyObject += New-Object -TypeName psobject -Property @{
+                Bitrate = $bitrate;
+                Name = $file.Name;
+                Path = $file.FullName;
+                Size = $fileObject.Size
+            }
         }        
     }
 

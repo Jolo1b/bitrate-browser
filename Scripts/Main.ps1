@@ -4,6 +4,7 @@ $FormObj = [System.Windows.forms.Form]
 $LabelObj = [System.Windows.forms.Label]
 $ButtonlObj = [System.Windows.forms.Button]
 $TextBoxObj = [System.Windows.forms.TextBox]
+$GetDirectoryDialog = [System.Windows.forms.FolderBrowserDialog]
 
 . "$PSScriptRoot\Get-Bitrate.ps1"
 
@@ -15,12 +16,22 @@ $form.Text = "bitrate getter"
 $form.ClientSize = "$winw,$winh"
 $form.BackColor = "#d0d0d0"
 
+$folderBrowser = New-Object $GetDirectoryDialog
+$folderBrowser.Description = "Select Folder"
+
 $searchButtonSize = @(100 ,30)
 $searchButtonLocation = @([int]($winw / 2 - $searchButtonSize[0] / 2) ,10)
 $searchButton = New-Object $ButtonlObj
 $searchButton.Text = "Select Folder"
 $searchButton.Size = New-Object System.Drawing.Size($searchButtonSize[0], $searchButtonSize[1])
 $searchButton.Location = New-Object System.Drawing.Point($searchButtonLocation[0], $searchButtonLocation[1])
+$searchButton.add_Click({
+    $status = $folderBrowser.ShowDialog()
+    if($status -eq [System.Windows.Forms.DialogResult]::OK){
+        $form.close()
+        Get-Bitrate $folderBrowser.SelectedPath | Out-GridView
+    }
+})
 $form.Controls.Add($searchButton)
 
 $minKbpsBoxSize = @(100, $null)
