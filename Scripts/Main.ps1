@@ -10,9 +10,11 @@ $GetDirectoryDialog = [System.Windows.forms.FolderBrowserDialog]
 
 [int] $winw = 250
 [int] $winh = 90
+[string] $title = "Bitrate Browser"
+
 
 $form = New-Object $FormObj
-$form.Text = "Bitrate Browser"
+$form.Text = $title
 $form.ClientSize = "$winw,$winh"
 $form.BackColor = "#c0c0c0"
 $form.FormBorderStyle = "FixedSingle"
@@ -28,6 +30,14 @@ $minKbpsBox.Size = New-Object System.Drawing.Size($minKbpsBoxSize[0], $minKbpsBo
 $minKbpsBox.Location = New-Object System.Drawing.Point($minKbpsBoxLocation[0], $minKbpsBoxLocation[1])
 $form.Controls.Add($minKbpsBox)
 
+$unitLabelSize = @(50, 30)
+$unitLabelLocation = @([int]($winw / 2 + $minKbpsBoxSize[0] / 2), 50)
+$unitLabel = New-Object $LabelObj
+$unitLabel.Text = "kbps"
+$unitLabel.Size = New-Object System.Drawing.Size($unitLabelSize[0], $unitLabelSize[1])
+$unitLabel.Location = New-Object System.Drawing.Point($unitLabelLocation[0], ($unitLabelLocation[1] + 3))
+$form.Controls.Add($unitLabel)
+
 $folderBrowser = New-Object $GetDirectoryDialog
 $folderBrowser.Description = "Select Folder"
 
@@ -41,21 +51,22 @@ $searchButton.Location = New-Object System.Drawing.Point($searchButtonLocation[0
 $searchButton.add_Click({
     $status = $folderBrowser.ShowDialog()
     if($status -eq [System.Windows.Forms.DialogResult]::OK){
-        $form.close()
+        # hide window and show "please wait" message
+        $form.Visible = $false
+        $msgJob = Start-Job -ScriptBlock {
+            Add-Type -AssemblyName PresentationFramework
+            [System.Windows.MessageBox]::Show('Please Wait', 'Bitrate Browser', 'Ok', 'Information')
+        }
+
         Get-Bitrate $folderBrowser.SelectedPath | 
             Where-Object {$_.Bitrate -ge $minKbpsBox.Text} | 
-            Out-GridView -Title "Bitrate Browser"
+            Out-GridView -Title $title
+        
+        Stop-Job $msgJob
+        Remove-Job $msgJob
     }
 })
 $form.Controls.Add($searchButton)
-
-$unitLabelSize = @(50, 30)
-$unitLabelLocation = @([int]($winw / 2 + $minKbpsBoxSize[0] / 2), 50)
-$unitLabel = New-Object $LabelObj
-$unitLabel.Text = "kbps"
-$unitLabel.Size = New-Object System.Drawing.Size($unitLabelSize[0], $unitLabelSize[1])
-$unitLabel.Location = New-Object System.Drawing.Point($unitLabelLocation[0], ($unitLabelLocation[1] + 3))
-$form.Controls.Add($unitLabel)
 
 $form.ShowDialog()
 $form.Dispose()
