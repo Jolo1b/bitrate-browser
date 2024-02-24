@@ -27,4 +27,5 @@ foreach($line in $mainFile){
 
 Set-Location $PSScriptRoot
 
-ps2exe -noConsole -noOutput -inputFile .\dist\dist.ps1 -outputFile ".\dist\bitrate-browser.exe" -noError
+ps2exe -noConsole -noOutput -inputFile .\dist\dist.ps1 -outputFile ".\dist\bitrate-browser_x86.exe" -noError -x86 -iconFile ..\Assets\Icon.ico
+ps2exe -noConsole -noOutput -inputFile .\dist\dist.ps1 -outputFile ".\dist\bitrate-browser_x64.exe" -noError -x64 -iconFile ..\Assets\Icon.ico
