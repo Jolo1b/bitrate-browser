@@ -1,4 +1,4 @@
-# bitrate getter
+# bitrate browser
 
 Is an application for windows that can find out the bitrate of all mp3 files in the selected folder (and its subfolders).
 

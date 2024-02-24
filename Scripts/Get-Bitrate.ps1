@@ -7,12 +7,9 @@ function Get-Bitrate {
         return 0
     }
 
-    # create objects
     $shell = New-Object -ComObject Shell.Application
     $AllMp3 = Get-ChildItem $pathToDir -Recurse -Filter *.mp3
-
     [int] $bitrateAttribute = 0
-
     $filesPropertyObject = @()
 
     foreach($file in $AllMp3){
@@ -24,16 +21,17 @@ function Get-Bitrate {
             if($name -eq "Bit rate") { $bitrateAttribute = $i }
         }
 
+        # bitrate acquisition
         $bitrateStr = $dirObject.GetDetailsOf($fileObject, $bitrateAttribute)
         if($bitrateStr -match "\d+") { [int] $bitrate = $Matches[0] }
         else { [int] $bitrate = -1 }
 
         if($bitrate -ne -1){
             $filesPropertyObject += New-Object -TypeName psobject -Property @{
-                Bitrate = $bitrate;
                 Name = $file.Name;
                 Path = $file.FullName;
-                Size = $fileObject.Size
+                Bitrate = $bitrate;
+                Size = $fileObject.Size ;
             }
         }        
     }

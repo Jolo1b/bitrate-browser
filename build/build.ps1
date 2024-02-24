@@ -27,4 +27,4 @@ foreach($line in $mainFile){
 
 Set-Location $PSScriptRoot
 
-ps2exe -noConsole -noOutput -inputFile .\dist\dist.ps1 -outputFile ".\dist\bitrate-getter.exe"
+ps2exe -noConsole -noOutput -inputFile .\dist\dist.ps1 -outputFile ".\dist\bitrate-browser.exe"
