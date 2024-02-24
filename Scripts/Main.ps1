@@ -12,9 +12,11 @@ $GetDirectoryDialog = [System.Windows.forms.FolderBrowserDialog]
 [int] $winh = 90
 
 $form = New-Object $FormObj
-$form.Text = "bitrate getter"
+$form.Text = "Bitrate Browser"
 $form.ClientSize = "$winw,$winh"
 $form.BackColor = "#c0c0c0"
+$form.FormBorderStyle = "FixedSingle"
+$form.MaximizeBox = $false
 
 $minKbpsBoxSize = @(100, $null)
 $minKbpsBoxLocation = @([int]($winw / 2 - $minKbpsBoxSize[0] / 2), 50)
@@ -40,7 +42,9 @@ $searchButton.add_Click({
     $status = $folderBrowser.ShowDialog()
     if($status -eq [System.Windows.Forms.DialogResult]::OK){
         $form.close()
-        Get-Bitrate $folderBrowser.SelectedPath | Where-Object {$_.Bitrate -ge $minKbpsBox.Text} | Out-GridView
+        Get-Bitrate $folderBrowser.SelectedPath | 
+            Where-Object {$_.Bitrate -ge $minKbpsBox.Text} | 
+            Out-GridView -Title "Bitrate Browser"
     }
 })
 $form.Controls.Add($searchButton)
