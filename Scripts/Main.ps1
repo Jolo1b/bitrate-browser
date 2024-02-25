@@ -4,7 +4,7 @@ $FormObj = [System.Windows.forms.Form]
 $LabelObj = [System.Windows.forms.Label]
 $ButtonlObj = [System.Windows.forms.Button]
 $NumericBoxObj = [System.Windows.forms.NumericUpDown]
-$GetDirectoryDialog = [System.Windows.forms.FolderBrowserDialog]
+$GetDirectoryDialog = [System.Windows.Forms.FolderBrowserDialog]
 
 . "$PSScriptRoot\Get-Bitrate.ps1"
 . "$PSScriptRoot\Save-Data.ps1"
@@ -62,12 +62,16 @@ $searchButton.add_Click({
         }
 
         $data = Get-Bitrate $folderBrowser.SelectedPath | Where-Object {$_.Bitrate -ge $minKbpsBox.Text}  
-        $data | Out-GridView -Title $title
 
         Stop-Job -Name $jobName
         Remove-Job -Name $jobName -Force
 
-        Save-Data $data $title
+        if($null -ne $data){
+            $data | Out-GridView -Title $title
+            Save-Data $data $title    
+        } else {
+            [System.Windows.MessageBox]::Show("mp3 files not found!", $title, "Ok", "Error")
+        }
     }
 })
 $form.Controls.Add($searchButton)

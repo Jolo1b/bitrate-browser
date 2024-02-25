@@ -7,8 +7,13 @@ function Get-Bitrate {
         return 0
     }
 
-    $shell = New-Object -ComObject Shell.Application
     $AllMp3 = Get-ChildItem $pathToDir -Recurse -Filter *.mp3
+
+    if($null -eq $AllMp3) {
+        return $null
+    }
+    
+    $shell = New-Object -ComObject Shell.Application
     [int] $bitrateAttribute = 0
     $filesPropertyObject = @()
 

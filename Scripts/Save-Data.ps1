@@ -7,7 +7,7 @@ function Save-Data {
     if($res -eq "Yes") {
         $SaveFileDialog = New-Object $SaveFileBrowser
         $SaveFileDialog.FileName = "Data"
-        $SaveFileDialog.DefaultExt = ".xml"
+        $SaveFileDialog.DefaultExt = ".csv"
         $SaveFileDialog.Filter = "CSV Files (*.csv)|*.csv|XML Files (*.xml)|*.xml"
      
         $res = $SaveFileDialog.ShowDialog()
