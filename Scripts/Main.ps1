@@ -7,6 +7,7 @@ $NumericBoxObj = [System.Windows.forms.NumericUpDown]
 $GetDirectoryDialog = [System.Windows.forms.FolderBrowserDialog]
 
 . "$PSScriptRoot\Get-Bitrate.ps1"
+. "$PSScriptRoot\Save-Data.ps1"
 
 [int] $winw = 250
 [int] $winh = 90
@@ -50,20 +51,23 @@ $searchButton.Size = New-Object System.Drawing.Size($searchButtonSize[0], $searc
 $searchButton.Location = New-Object System.Drawing.Point($searchButtonLocation[0], $searchButtonLocation[1])
 $searchButton.add_Click({
     $status = $folderBrowser.ShowDialog()
-    if($status -eq [System.Windows.Forms.DialogResult]::OK){
+    if($status -eq "OK"){
         # hide window and show "please wait" message
         $form.Visible = $false
-        $msgJob = Start-Job -ScriptBlock {
+        [string] $jobName = "msgJob"
+        Start-Job -Name $jobName -ScriptBlock {
             Add-Type -AssemblyName PresentationFramework
+            Wait-Event -Timeout 1
             [System.Windows.MessageBox]::Show('Please Wait', 'Bitrate Browser', 'Ok', 'Information')
         }
 
-        Get-Bitrate $folderBrowser.SelectedPath | 
-            Where-Object {$_.Bitrate -ge $minKbpsBox.Text} | 
-            Out-GridView -Title $title
-        
-        Stop-Job $msgJob
-        Remove-Job $msgJob
+        $data = Get-Bitrate $folderBrowser.SelectedPath | Where-Object {$_.Bitrate -ge $minKbpsBox.Text}  
+        $data | Out-GridView -Title $title
+
+        Stop-Job -Name $jobName
+        Remove-Job -Name $jobName -Force
+
+        Save-Data $data $title
     }
 })
 $form.Controls.Add($searchButton)
