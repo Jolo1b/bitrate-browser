@@ -18,7 +18,7 @@ function Save-Data {
             if ($ext -eq ".csv"){
                 $data | Export-Csv $filePath -NoTypeInformation
             } elseif($ext -eq ".xml"){
-                $data | Export-Clixml $filePath -NoTypeInformation
+                $data | Export-Clixml $filePath
             }
         }
     }

@@ -63,15 +63,15 @@ $searchButton.add_Click({
 
         $data = Get-Bitrate $folderBrowser.SelectedPath | Where-Object {$_.Bitrate -ge $minKbpsBox.Text}  
 
-        Stop-Job -Name $jobName
-        Remove-Job -Name $jobName -Force
-
         if($null -ne $data){
             $data | Out-GridView -Title $title
             Save-Data $data $title    
         } else {
             [System.Windows.MessageBox]::Show("mp3 files not found!", $title, "Ok", "Error")
         }
+
+        Stop-Job -Name $jobName
+        Remove-Job -Name $jobName -Force
     }
 })
 $form.Controls.Add($searchButton)
