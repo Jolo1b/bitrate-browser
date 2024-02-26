@@ -1,5 +1,6 @@
 function Save-Data {
     param ($data, [string] $title)
+    Add-Type -AssemblyName PresentationFramework
     Add-Type -AssemblyName System.Windows.Forms
     $SaveFileBrowser = [System.Windows.Forms.SaveFileDialog]
 
