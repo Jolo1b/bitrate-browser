@@ -59,7 +59,7 @@ $searchButton.add_Click({
         Start-Job -Name $jobName -ScriptBlock {
             Add-Type -AssemblyName PresentationFramework
             Wait-Event -Timeout 1
-            [System.Windows.MessageBox]::Show('Please Wait', 'Bitrate Browser', 'Ok', 'Information')
+            [System.Windows.MessageBox]::Show('Please Wait (press OK)', 'Bitrate Browser', 'Ok', 'Information')
         }
 
         $data = Get-Bitrate $folderBrowser.SelectedPath | Where-Object {$_.Bitrate -ge $minKbpsBox.Text}  
