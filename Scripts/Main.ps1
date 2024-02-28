@@ -1,5 +1,4 @@
 Add-Type -AssemblyName System.Windows.Forms
-Add-Type -AssemblyName PresentationFramework
 
 $FormObj = [System.Windows.forms.Form]
 $LabelObj = [System.Windows.forms.Label]
@@ -14,11 +13,10 @@ $GetDirectoryDialog = [System.Windows.Forms.FolderBrowserDialog]
 [int] $winh = 90
 [string] $title = "Bitrate Browser"
 
-
 $form = New-Object $FormObj
 $form.Text = $title
 $form.ClientSize = "$winw,$winh"
-$form.BackColor = "#c0c0c0"
+$form.BackColor = "#858585"
 $form.FormBorderStyle = "FixedSingle"
 $form.MaximizeBox = $false
 
@@ -71,7 +69,7 @@ $searchButton.add_Click({
             $data | Out-GridView -Title $title
             Save-Data $data $title    
         } else {
-            [System.Windows.MessageBox]::Show("mp3 files not found!", $title, "Ok", "Error")
+            [System.Windows.Forms.MessageBox]::Show("mp3 files not found!", $title, "Ok", "Error")
         }
 
     }

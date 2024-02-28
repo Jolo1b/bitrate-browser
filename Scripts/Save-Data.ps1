@@ -1,10 +1,9 @@
 function Save-Data {
     param ($data, [string] $title)
-    Add-Type -AssemblyName PresentationFramework
     Add-Type -AssemblyName System.Windows.Forms
     $SaveFileBrowser = [System.Windows.Forms.SaveFileDialog]
 
-    $res = [System.Windows.MessageBox]::Show("You want to save data", $title, "YesNo", "Question")
+    $res = [System.Windows.Forms.MessageBox]::Show("You want to save data", $title, "YesNo", "Question")
     if($res -eq "Yes") {
         $SaveFileDialog = New-Object $SaveFileBrowser
         $SaveFileDialog.FileName = "Data"

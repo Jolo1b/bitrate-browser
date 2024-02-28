@@ -1,6 +1,5 @@
 function Get-Bitrate {
     param($pathToDir)
-    Add-Type -AssemblyName PresentationFramework
 
     # verify if the specified folder exists
     if(-not (Test-Path $pathToDir -PathType Container)){
