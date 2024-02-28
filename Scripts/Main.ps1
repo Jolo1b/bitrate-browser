@@ -16,7 +16,7 @@ $GetDirectoryDialog = [System.Windows.Forms.FolderBrowserDialog]
 $form = New-Object $FormObj
 $form.Text = $title
 $form.ClientSize = "$winw,$winh"
-$form.BackColor = "#858585"
+$form.BackColor = "#8a8a8a"
 $form.FormBorderStyle = "FixedSingle"
 $form.MaximizeBox = $false
 
@@ -74,6 +74,7 @@ $searchButton.add_Click({
 
     }
 })
+
 $form.Controls.Add($searchButton)
 
 $form.ShowDialog()
