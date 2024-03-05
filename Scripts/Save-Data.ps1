@@ -1,6 +1,7 @@
+. "$PSScriptRoot\Set-Style.ps1"
+
 function Save-Data {
     param ($data, [string] $title)
-    Add-Type -AssemblyName System.Windows.Forms
     $SaveFileBrowser = [System.Windows.Forms.SaveFileDialog]
 
     $res = [System.Windows.Forms.MessageBox]::Show("You want to save data", $title, "YesNo", "Question")
@@ -18,17 +19,7 @@ function Save-Data {
             if ($ext -eq ".csv"){
                 $data | Export-Csv $filePath -NoTypeInformation
             } elseif($ext -eq ".xlsx"){
-                try {
-                    Import-Module ImportExcel
-                    $data | Export-Excel $filePath -AutoSize -TableStyle Dark11
-                } catch {
-                    [string] $message = "If you want to save the results directly to xlsx format, " +
-                    "you need to install the 'ImportExcel' library from the PS Gallery or" + 
-                    " Github: https://github.com/dfinke/ImportExcel`nIf you don't want to do that," +
-                    " you can save them in csv (recommended) or xml format, which you can open in Excel."
-                
-                    [System.Windows.Forms.MessageBox]::Show($message, $title, "Ok", "Error")
-                }
+                Set-Style $data $filePath
             } elseif($ext -eq ".xml"){
                 $data | Export-Clixml $filePath
             }

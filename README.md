@@ -11,8 +11,7 @@ The application may look better in the pictures because powershell 7 was used an
 
 This is due to the fact that the application uses windows forms to render the gui.
 
-### EXE file
-- warning: exe file will look even worse!  
+### EXE file 
 [r/ProgrammerHumor](https://www.reddit.com/r/ProgrammerHumor/)  
 
 - Before running, scan the exe file with antivirus because windows defender won't like it.

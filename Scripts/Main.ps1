@@ -17,8 +17,9 @@ $form = New-Object $FormObj
 $form.Text = $title
 $form.ClientSize = "$winw,$winh"
 $form.BackColor = "#8a8a8a"
-$form.FormBorderStyle = "FixedSingle"
+$form.FormBorderStyle = "FixedDialog"
 $form.MaximizeBox = $false
+$form.StartPosition = "CenterScreen"
 
 $minKbpsBoxSize = @(100, $null)
 $minKbpsBoxLocation = @([int]($winw / 2 - $minKbpsBoxSize[0] / 2), 50)
