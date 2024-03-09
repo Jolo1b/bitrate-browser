@@ -62,15 +62,7 @@ $form.Controls.Add($unitLabel)
 $folderBrowser = New-Object $GetDirectoryDialog
 $folderBrowser.Description = "Select Folder"
 
-$searchButtonSize = @(120, 40)
-$searchButtonLocation = @($(Set-CenterElement $searchButtonSize[0]) ,15)
-$searchButton = New-Object $ButtonlObj
-$searchButton.Text = "Select Folder"
-$searchButton.Font = New-Object System.Drawing.Font("Arial", 10)
-$searchButton.BackColor = "#e0e0e0"
-$searchButton.Size = New-Object System.Drawing.Size($searchButtonSize[0], $searchButtonSize[1])
-$searchButton.Location = New-Object System.Drawing.Point($searchButtonLocation[0], $searchButtonLocation[1])
-$searchButton.add_Click({
+function Start-Ation {
     $status = $folderBrowser.ShowDialog()
     if($status -eq "OK"){
         # hide window and show "please wait" message
@@ -93,6 +85,24 @@ $searchButton.add_Click({
             [System.Windows.Forms.MessageBox]::Show("mp3 files not found!", $title, "Ok", "Error")
         }
 
+    }
+}
+
+$searchButtonSize = @(120, 40)
+$searchButtonLocation = @($(Set-CenterElement $searchButtonSize[0]) ,15)
+$searchButton = New-Object $ButtonlObj
+$searchButton.Text = "Select Folder"
+$searchButton.Font = New-Object System.Drawing.Font("Arial", 10)
+$searchButton.BackColor = "#e0e0e0"
+$searchButton.Size = New-Object System.Drawing.Size($searchButtonSize[0], $searchButtonSize[1])
+$searchButton.Location = New-Object System.Drawing.Point($searchButtonLocation[0], $searchButtonLocation[1])
+$searchButton.add_Click({
+    Start-Ation
+})
+
+$minKbpsBox.Add_KeyPress({
+    if($_.KeyChar -eq 13){
+        Start-Ation
     }
 })
 
