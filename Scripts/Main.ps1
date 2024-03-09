@@ -40,7 +40,7 @@ $form.StartPosition = "CenterScreen"
 $form.TopMost = $true
 
 $minKbpsBoxSize = @(130, $null)
-$minKbpsBoxLocation = @($(Set-CenterElement $minKbpsBoxSize[0]), 65)
+$minKbpsBoxLocation = @($(Set-CenterElement $minKbpsBoxSize[0]), 68)
 $minKbpsBox = New-Object $NumericBoxObj
 $minKbpsBox.Minimum = 0
 $minKbpsBox.Maximum = 320
@@ -88,7 +88,7 @@ function Start-Ation {
     }
 }
 
-$searchButtonSize = @(120, 40)
+$searchButtonSize = @(127, 40)
 $searchButtonLocation = @($(Set-CenterElement $searchButtonSize[0]) ,15)
 $searchButton = New-Object $ButtonlObj
 $searchButton.Text = "Select Folder"
