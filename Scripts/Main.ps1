@@ -20,8 +20,10 @@ $GetDirectoryDialog = [System.Windows.Forms.FolderBrowserDialog]
 . "$PSScriptRoot\Get-Bitrate.ps1"
 . "$PSScriptRoot\Save-Data.ps1"
 
-[int] $winw = 290
+[int] $winw = 300
 [int] $winh = 110
+[int] $winhp = $winh / 5
+[int] $space = 4
 [string] $title = "Bitrate Browser"
 
 function Set-CenterElement {
@@ -40,7 +42,7 @@ $form.StartPosition = "CenterScreen"
 $form.TopMost = $true
 
 $minKbpsBoxSize = @(130, $null)
-$minKbpsBoxLocation = @($(Set-CenterElement $minKbpsBoxSize[0]), 68)
+$minKbpsBoxLocation = @($(Set-CenterElement $minKbpsBoxSize[0]), ($winhp * 3 - $space))
 $minKbpsBox = New-Object $NumericBoxObj
 $minKbpsBox.Minimum = 0
 $minKbpsBox.Maximum = 320
@@ -89,7 +91,7 @@ function Start-Ation {
 }
 
 $searchButtonSize = @(127, 40)
-$searchButtonLocation = @($(Set-CenterElement $searchButtonSize[0]) ,15)
+$searchButtonLocation = @($(Set-CenterElement $searchButtonSize[0]), ($winhp - $space))
 $searchButton = New-Object $ButtonlObj
 $searchButton.Text = "Select Folder"
 $searchButton.Font = New-Object System.Drawing.Font("Arial", 10)

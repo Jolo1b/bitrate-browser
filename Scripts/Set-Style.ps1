@@ -8,7 +8,7 @@ function Set-Style {
     for([byte] $i = 0;$i -le 28;$i++){ $allStyles += "Medium$i" }
     for([byte] $i = 0;$i -le 11;$i++){ $allStyles += "Dark$i" }
     [int] $winw = 300
-    [int] $winh = 70
+    [int] $winh = 80
 
     $form = New-Object System.Windows.Forms.Form
     $form.Text = "Table styles"
@@ -20,12 +20,12 @@ function Set-Style {
     $form.StartPosition = "centerScreen"
     $form.TopMost = $true
 
-    $selectStyleWidth = 140
+    $selectStyleWidth = 134
     $selectStyle = New-Object System.Windows.Forms.ComboBox
     $selectStyle.Text = "None"
     $selectStyle.Size = New-Object System.Drawing.Size($selectStyleWidth, 0)
-    $selectStyle.Font = New-Object System.Drawing.Font("Arial", 11)
-    $selectStyle.Location = New-Object System.Drawing.Point(($winw - $selectStyleWidth - 20), 20)
+    $selectStyle.Font = New-Object System.Drawing.Font("Arial", 10)
+    $selectStyle.Location = New-Object System.Drawing.Point(($winw - $selectStyleWidth - 25), 25)
     foreach($style in $allStyles){
         $selectStyle.Items.Add($style)
     }
@@ -34,10 +34,10 @@ function Set-Style {
     $okButton = New-Object System.Windows.Forms.Button
     $okButton.Text = "ok"
     $okButton.BackColor = "#eeeeee"
-    $okButton.Location = New-Object System.Drawing.Point(20, 20)
+    $okButton.Location = New-Object System.Drawing.Point(30, 24)
     $okButton.Size = New-Object System.Drawing.Size(80, 30)
-    $okButton.Font = New-Object System.Drawing.Font("Arial", 11)
-    $okButton.Add_Click({
+    $okButton.Font = New-Object System.Drawing.Font("Arial", 10)
+    $okButton.Add_Click({   
         $selectedSyles = New-Object -TypeName psobject -Property @{
             Style = $selectStyle.SelectedItem
         }
