@@ -1,11 +1,16 @@
 Set-Location "$PSScriptRoot\..\Scripts"
 $items = Get-ChildItem -Recurse -Filter *.ps1
 
-"" | Out-file "$PSScriptRoot\dist\bitrate-browser.ps1"
-$mainFileContent = Get-Content "$PSScriptRoot\..\Scripts\Main.ps1"
-
 $red = [char]0x001b + "[31m"
 $noColor = [char]0x001b + "[0m"
+
+if(-not (Test-Path "$PSScriptRoot\dist")) {
+    Write-Host $red"Creating dist folder..."$noColor
+    New-Item "$PSScriptRoot\dist" -ItemType Directory
+}
+
+"" | Out-file "$PSScriptRoot\dist\bitrate-browser.ps1"
+$mainFileContent = Get-Content "$PSScriptRoot\..\Scripts\Main.ps1"
 
 Write-Host $red"Building..."$noColor
 
