@@ -4,9 +4,9 @@ function Set-Style {
     param($data, [string] $path)
     
     $allStyles = @("None", "Custom")
-    for([byte] $i = 0;$i -le 21;$i++){ $allStyles += "Light$i" }
-    for([byte] $i = 0;$i -le 28;$i++){ $allStyles += "Medium$i" }
-    for([byte] $i = 0;$i -le 11;$i++){ $allStyles += "Dark$i" }
+    for([byte] $i = 1;$i -le 21;$i++){ $allStyles += "Light$i" }
+    for([byte] $i = 1;$i -le 28;$i++){ $allStyles += "Medium$i" }
+    for([byte] $i = 1;$i -le 11;$i++){ $allStyles += "Dark$i" }
     [int] $winw = 300
     [int] $winh = 80
 
