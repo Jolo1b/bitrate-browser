@@ -35,4 +35,4 @@ ps12exe -noConsole -noOutput -inputFile .\dist\bitrate-browser.ps1 -outputFile "
 ps12exe -noConsole -noOutput -inputFile .\dist\bitrate-browser.ps1 -outputFile ".\dist\bitrate browser_anycpu.exe" -noError -architecture anycpu -noVisualStyles -iconFile ..\Assets\Icon.ico
 
 Write-Host $red"Press any key to continue..."$noColor -NoNewline
-[System.Console]::ReadKey()
+[System.Console]::ReadKey() | Out-Null

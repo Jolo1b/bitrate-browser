@@ -63,7 +63,7 @@ $fileTypeBox.Font = New-Object System.Drawing.Font("Arial", 10)
 $fileTypeBox.Size = New-Object System.Drawing.Size($fileTypeBoxSize[0], $fileTypeBoxSize[1])
 $fileTypeBox.Location = New-Object System.Drawing.Point($fileTypeBoxLocation[0], $fileTypeBoxLocation[1])
 $fileTypeBox.Text = "*.mp3"
-$fileTypesRange = @("ALL",
+$fileTypesRange = @("All",
     "*.mp3", 
     "*.m4a", 
     "*.wav", 
