@@ -63,7 +63,7 @@ $fileTypeBox.Font = New-Object System.Drawing.Font("Arial", 10)
 $fileTypeBox.Size = New-Object System.Drawing.Size($fileTypeBoxSize[0], $fileTypeBoxSize[1])
 $fileTypeBox.Location = New-Object System.Drawing.Point($fileTypeBoxLocation[0], $fileTypeBoxLocation[1])
 $fileTypeBox.Text = "*.mp3"
-$fileTypesRange = @("All",
+$fileTypesRange = @("all",
     "*.mp3", 
     "*.m4a", 
     "*.wav", 
@@ -103,7 +103,7 @@ function Start-Ation {
         }
 
         $fileType = $fileTypeBox.SelectedItem
-        if($fileTypeBox.SelectedItem -eq "All"){
+        if($fileTypeBox.SelectedItem -eq "all"){
             $fileType = $fileTypeBox.Items
         }
 
