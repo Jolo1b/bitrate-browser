@@ -3,8 +3,10 @@
 Is an application for windows that can find out the bitrate of all mp3 files in the selected folder (and its subfolders).
 
 ### Pictures from using the app
-![Picture from using the app (imgur hosting)](https://imgur.com/ljg6R7q.png)  
-![Picture from using the app (imgur hosting)](https://imgur.com/jGN9T2f.png)
-![Picture from using the app (imgur hosting)](https://imgur.com/38JdsSU.png)
-![Picture from using the app (imgur hosting)](https://imgur.com/1jq7Xrz.png)
-![Picture from using the app (imgur hosting)](https://imgur.com/SLxky88.png)
+
+![Picture from using the app (hosting imgur)](https://imgur.com/kavUP7n.png)  
+![Picture from using the app (hosting imgur)](https://imgur.com/8sxoyT7.png)
+![Picture from using the app (hosting imgur)](https://imgur.com/Indy7sV.png)
+![Picture from using the app (hosting imgur)](https://imgur.com/A5QyNQY.png)
+![Picture from using the app (hosting imgur)](https://imgur.com/fLY5nMR.png)
+![Picture from using the app (hosting imgur)](https://imgur.com/AXPnvGM.png)
