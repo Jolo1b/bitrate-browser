@@ -15,22 +15,17 @@ $FormObj = [System.Windows.forms.Form]
 $LabelObj = [System.Windows.forms.Label]
 $ButtonlObj = [System.Windows.forms.Button]
 $NumericBoxObj = [System.Windows.forms.NumericUpDown]
+$selectBoxObj = [System.Windows.forms.ComboBox]
 $GetDirectoryDialog = [System.Windows.Forms.FolderBrowserDialog]
 
 . "$PSScriptRoot\Get-Bitrate.ps1"
 . "$PSScriptRoot\Save-Data.ps1"
 
-[int] $winw = 300
-[int] $winh = 110
-[int] $winhp = $winh / 5
-[int] $space = 4
+[int16] $winw = 300
+[int16] $winh = 120
 [string] $title = "Bitrate Browser"
-
-function Set-CenterElement {
-    param($size) 
-    $newPosition = ([int]($winw / 2 - $size / 2))
-    return $newPosition
-}
+[int16] $margin_y = $winh - $winh + 20
+[int16] $margin_x = 10
 
 $form = New-Object $FormObj
 $form.Text = $title
@@ -41,9 +36,9 @@ $form.MaximizeBox = $false
 $form.StartPosition = "CenterScreen"
 $form.TopMost = $true
 
-$minKbpsBoxSize = @(130, $null)
-$minKbpsBoxLocation = @($(Set-CenterElement $minKbpsBoxSize[0]), ($winhp * 3 - $space))
 $minKbpsBox = New-Object $NumericBoxObj
+$minKbpsBoxSize = @(130, $null)
+$minKbpsBoxLocation =  @($margin_x, ($winh - $minKbpsBox.Height - $margin_y - 5))
 $minKbpsBox.Minimum = 0
 $minKbpsBox.Maximum = 320
 $minKbpsBox.Value = 192
@@ -52,18 +47,45 @@ $minKbpsBox.Size = New-Object System.Drawing.Size($minKbpsBoxSize[0], $minKbpsBo
 $minKbpsBox.Location = New-Object System.Drawing.Point($minKbpsBoxLocation[0], $minKbpsBoxLocation[1])
 $form.Controls.Add($minKbpsBox)
 
+$unitLabel = New-Object $LabelObj
 $unitLabelSize = @(50, 30)
 $unitLabelLocation = @(($minKbpsBoxLocation[0] + $minKbpsBoxSize[0]), ($minKbpsBoxLocation[1] + 5))
-$unitLabel = New-Object $LabelObj
 $unitLabel.Text = "kbps"
 $unitLabel.Font = New-Object System.Drawing.Font("Arial", 10)
 $unitLabel.Size = New-Object System.Drawing.Size($unitLabelSize[0], $unitLabelSize[1])
 $unitLabel.Location = New-Object System.Drawing.Point($unitLabelLocation[0], $unitLabelLocation[1])
 $form.Controls.Add($unitLabel)
 
+$fileTypeBox = New-Object $SelectBoxObj
+$fileTypeBoxSize = @(130, $null)
+$fileTypeBoxLocation = @($margin_x, $margin_y)
+$fileTypeBox.Font = New-Object System.Drawing.Font("Arial", 10)
+$fileTypeBox.Size = New-Object System.Drawing.Size($fileTypeBoxSize[0], $fileTypeBoxSize[1])
+$fileTypeBox.Location = New-Object System.Drawing.Point($fileTypeBoxLocation[0], $fileTypeBoxLocation[1])
+$fileTypeBox.Text = "*.mp3"
+$fileTypesRange = @("ALL",
+    "*.mp3", 
+    "*.m4a", 
+    "*.wav", 
+    "*.wma", 
+    "*.ogg", 
+    "*.flac", 
+    "*.aac", 
+    "*.aiff")
+foreach($fileType in $fileTypesRange){
+    $fileTypeBox.Items.Add($fileType)
+}
+$fileTypeBox.Add_SelectedValueChanged({
+    if($fileTypeBox.SelectedItem -eq "*.mp3"){
+        $minKbpsBox.Maximum = 320
+    } else {
+        $minKbpsBox.Maximum = 32768
+    }
+})
+$form.Controls.Add($fileTypeBox)
+
 $folderBrowser = New-Object $GetDirectoryDialog
 $folderBrowser.Description = "Select Folder"
-
 function Start-Ation {
     $status = $folderBrowser.ShowDialog()
     if($status -eq "OK"){
@@ -73,26 +95,42 @@ function Start-Ation {
         Start-Job -Name $jobName -ScriptBlock {
             Add-Type -AssemblyName PresentationFramework
             Wait-Event -Timeout 1
-            [System.Windows.MessageBox]::Show('Please Wait (press OK)', 'Bitrate Browser', 'Ok', 'Information')
+            [System.Windows.MessageBox]::Show(
+                "Please Wait (press OK)", 
+                "Bitrate Browser", 
+                "Ok", 
+                "Information")
         }
 
-        $data = Get-Bitrate $folderBrowser.SelectedPath | Where-Object {$_.Bitrate -ge $minKbpsBox.Text}  
+        $fileType = $fileTypeBox.SelectedItem
+        if($fileTypeBox.SelectedItem -eq "All"){
+            $fileType = $fileTypeBox.Items
+        }
+
+        $data = Get-Bitrate $folderBrowser.SelectedPath $fileType | Where-Object {$_.Bitrate -ge $minKbpsBox.Text}  
         Stop-Job -Name $jobName
         Remove-Job -Name $jobName -Force
 
         if($null -ne $data){
             $data | Out-GridView -Title $title
-            Save-Data $data $title    
+            Save-Data $data $title
         } else {
-            [System.Windows.Forms.MessageBox]::Show("mp3 files not found!", $title, "Ok", "Error")
+            [string] $message
+            if($fileTypeBox.SelectedItem -ne "All"){$message = "files not found!"}
+            else {$message = "$($fileTypeBox.SelectedItem) files not found!"}
+            [System.Windows.Forms.MessageBox]::Show(
+                    $message,
+                    $title, 
+                    "Ok", 
+                    "Error")
         }
 
     }
 }
 
-$searchButtonSize = @(127, 40)
-$searchButtonLocation = @($(Set-CenterElement $searchButtonSize[0]), ($winhp - $space))
 $searchButton = New-Object $ButtonlObj
+$searchButtonSize = @(127, 40)
+$searchButtonLocation = @(($winw -  $margin_x - $searchButtonSize[0]), $margin_y)
 $searchButton.Text = "Select Folder"
 $searchButton.Font = New-Object System.Drawing.Font("Arial", 10)
 $searchButton.BackColor = "#e0e0e0"

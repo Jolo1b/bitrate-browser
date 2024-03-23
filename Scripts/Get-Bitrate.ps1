@@ -1,5 +1,5 @@
 function Get-Bitrate {
-    param($pathToDir)
+    param($pathToDir, $fileType)
 
     # verify if the specified folder exists
     if(-not (Test-Path $pathToDir -PathType Container)){
@@ -7,9 +7,17 @@ function Get-Bitrate {
         return 0
     }
 
-    $AllMp3 = Get-ChildItem $pathToDir -Recurse -Filter *.mp3
+    $AllMusicFiles = @()
+    if($fileType.Length -ne 0){
+        $AllFiles = Get-ChildItem $pathToDir -Recurse -File
+        foreach($type in $fileType){
+            $AllMusicFiles += $AllFiles | Where-Object { "*$($_.Extension)" -eq $type }
+        }
+    } else { 
+        $AllMusicFiles = Get-ChildItem $pathToDir -Recurse -Filter $type -File
+    }
 
-    if($null -eq $AllMp3) {
+    if($null -eq $AllMusicFiles) {
         return $null
     }
     
@@ -17,7 +25,7 @@ function Get-Bitrate {
     [int] $bitrateAttribute = 28
     $filesPropertyObject = @()
 
-    foreach($file in $AllMp3){
+    foreach($file in $AllMusicFiles){
         $dirObject = $shell.NameSpace($file.Directory.FullName)
         $fileObject = $dirObject.ParseName($file.Name)
 
@@ -30,7 +38,8 @@ function Get-Bitrate {
             Name = $file.Name;
             Path = $file.FullName;
             Bitrate = $bitrate;
-            Size = $fileObject.Size ;
+            Size = $fileObject.Size;
+            Extension = $file.Extension
         }   
     }
 
