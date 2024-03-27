@@ -8,7 +8,7 @@ function Get-Bitrate {
     }
 
     $AllMusicFiles = @()
-    if($fileType.Length -ne 0){
+    if($fileType.GetType().Name -eq "ObjectCollection"){
         $AllFiles = $null
         if($force){
             $AllFiles = Get-ChildItem $pathToDir -Recurse -File -Force
@@ -20,12 +20,12 @@ function Get-Bitrate {
         }
     } else { 
         if($force){
-            $AllMusicFiles = Get-ChildItem $pathToDir -Recurse -File -Force
+            $AllMusicFiles = Get-ChildItem $pathToDir -Recurse -Filter $fileType -File -Force
         } else {
-            $AllMusicFiles = Get-ChildItem $pathToDir -Recurse -Filter $type -File
+            $AllMusicFiles = Get-ChildItem $pathToDir -Recurse -Filter $fileType -File
         }
     }
-    
+
     if($null -eq $AllMusicFiles) {
         return $null
     }

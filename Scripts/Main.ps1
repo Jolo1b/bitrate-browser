@@ -117,6 +117,10 @@ function Start-Ation {
             $fileType = $fileTypeBox.Items
         }
 
+        if($null -eq $fileTypeBox.SelectedItem){
+            $fileType = "*.mp3"
+        }
+
         $data = Get-Bitrate $folderBrowser.SelectedPath $fileType $forceCheckBox.Checked | Where-Object {$_.Bitrate -ge $minKbpsBox.Text}  
         Stop-Job -Name $jobName
         Remove-Job -Name $jobName -Force
