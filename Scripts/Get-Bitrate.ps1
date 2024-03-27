@@ -1,5 +1,5 @@
 function Get-Bitrate {
-    param($pathToDir, $fileType)
+    param($pathToDir, $fileType, $force)
 
     # verify if the specified folder exists
     if(-not (Test-Path $pathToDir -PathType Container)){
@@ -9,14 +9,23 @@ function Get-Bitrate {
 
     $AllMusicFiles = @()
     if($fileType.Length -ne 0){
-        $AllFiles = Get-ChildItem $pathToDir -Recurse -File
+        $AllFiles = $null
+        if($force){
+            $AllFiles = Get-ChildItem $pathToDir -Recurse -File -Force
+        } else {
+            $AllFiles = Get-ChildItem $pathToDir -Recurse -File
+        }
         foreach($type in $fileType){
             $AllMusicFiles += $AllFiles | Where-Object { "*$($_.Extension)" -eq $type }
         }
     } else { 
-        $AllMusicFiles = Get-ChildItem $pathToDir -Recurse -Filter $type -File
+        if($force){
+            $AllMusicFiles = Get-ChildItem $pathToDir -Recurse -File -Force
+        } else {
+            $AllMusicFiles = Get-ChildItem $pathToDir -Recurse -Filter $type -File
+        }
     }
-
+    
     if($null -eq $AllMusicFiles) {
         return $null
     }

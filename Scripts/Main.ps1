@@ -17,6 +17,7 @@ $ButtonlObj = [System.Windows.forms.Button]
 $NumericBoxObj = [System.Windows.forms.NumericUpDown]
 $selectBoxObj = [System.Windows.forms.ComboBox]
 $GetDirectoryDialog = [System.Windows.Forms.FolderBrowserDialog]
+$checkBoxObj = [System.Windows.Forms.CheckBox]
 
 . "$PSScriptRoot\Get-Bitrate.ps1"
 . "$PSScriptRoot\Save-Data.ps1"
@@ -55,6 +56,15 @@ $unitLabel.Font = New-Object System.Drawing.Font("Arial", 10)
 $unitLabel.Size = New-Object System.Drawing.Size($unitLabelSize[0], $unitLabelSize[1])
 $unitLabel.Location = New-Object System.Drawing.Point($unitLabelLocation[0], $unitLabelLocation[1])
 $form.Controls.Add($unitLabel)
+
+$forceCheckBox = New-Object $checkBoxObj
+$forceCheckBoxSize = @(90, 30)
+$forceCheckBoxLocation = @(($unitLabelLocation[0] + $unitLabelSize[0] + 5), ($unitLabelLocation[1] - 3))
+$forceCheckBox.Font = New-Object System.Drawing.Font("Arial", 10)
+$forceCheckBox.Size = New-Object System.Drawing.Size($forceCheckBoxSize[0], $forceCheckBoxSize[1])
+$forceCheckBox.Location = New-Object System.Drawing.Point($forceCheckBoxLocation[0], $forceCheckBoxLocation[1])
+$forceCheckBox.Text = "Force"
+$form.Controls.Add($forceCheckBox)
 
 $fileTypeBox = New-Object $SelectBoxObj
 $fileTypeBoxSize = @(130, $null)
@@ -107,7 +117,7 @@ function Start-Ation {
             $fileType = $fileTypeBox.Items
         }
 
-        $data = Get-Bitrate $folderBrowser.SelectedPath $fileType | Where-Object {$_.Bitrate -ge $minKbpsBox.Text}  
+        $data = Get-Bitrate $folderBrowser.SelectedPath $fileType $forceCheckBox.Checked | Where-Object {$_.Bitrate -ge $minKbpsBox.Text}  
         Stop-Job -Name $jobName
         Remove-Job -Name $jobName -Force
 
