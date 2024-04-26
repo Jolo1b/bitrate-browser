@@ -1,30 +1,18 @@
 function Get-Bitrate {
     param($pathToDir, $fileType, $force)
 
-    # verify if the specified folder exists
-    if(-not (Test-Path $pathToDir -PathType Container)){
-        Write-Host "Error: invalid path"
-        return 0
-    }
-
+    [string] $command = "Get-ChildItem -Recurse -Filter "
     $AllMusicFiles = @()
     if($fileType.GetType().Name -eq "ObjectCollection"){
-        $AllFiles = $null
-        if($force){
-            $AllFiles = Get-ChildItem $pathToDir -Recurse -File -Force
-        } else {
-            $AllFiles = Get-ChildItem $pathToDir -Recurse -File
-        }
-        foreach($type in $fileType){
-            $AllMusicFiles += $AllFiles | Where-Object { "*$($_.Extension)" -eq $type }
-        }
-    } else { 
-        if($force){
-            $AllMusicFiles = Get-ChildItem $pathToDir -Recurse -Filter $fileType -File -Force
-        } else {
-            $AllMusicFiles = Get-ChildItem $pathToDir -Recurse -Filter $fileType -File
-        }
+        foreach($type in $fileType){ $command += "$type " }
+    } else {
+        $command += "$fileType "
     }
+
+    $command += if($force) {"-Force"}
+
+    Invoke-Expression "$command"
+    Write-Host $AllMusicFiles
 
     if($null -eq $AllMusicFiles) {
         return $null

@@ -20,7 +20,7 @@ function Save-Excel {
         $choise = [System.Windows.Forms.MessageBox]::Show($question, $title, "YesNo", "Question")
 
         if($choise -eq "Yes"){
-            Start-Process powershell -ArgumentList "Install-Module ImportExcel -Force ; exit" -Verb RunAs -Wait
+            Start-Process powershell -ArgumentList "[System.Console]::Title(`"don``t close this window!!!`") ; Install-Module ImportExcel -Force" -Verb RunAs -Wait
             Save-File    
         }
     }

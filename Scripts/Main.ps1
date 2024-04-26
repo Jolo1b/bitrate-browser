@@ -82,21 +82,16 @@ $fileTypesRange = @("all",
     "*.flac", 
     "*.aac", 
     "*.aiff")
-foreach($fileType in $fileTypesRange){
-    $fileTypeBox.Items.Add($fileType)
-}
+foreach($fileType in $fileTypesRange) { $fileTypeBox.Items.Add($fileType) }
 $fileTypeBox.Add_SelectedValueChanged({
-    if($fileTypeBox.SelectedItem -eq "*.mp3"){
-        $minKbpsBox.Maximum = 320
-    } else {
-        $minKbpsBox.Maximum = 32768
-    }
+    $minKbpsBox.Maximum = if($fileTypeBox.SelectedItem -eq "*.mp3") {320} else {32768}
 })
 $form.Controls.Add($fileTypeBox)
 
 $folderBrowser = New-Object $GetDirectoryDialog
 $folderBrowser.Description = "Select Folder"
 function Start-Ation {
+    param($itemBox)
     $status = $folderBrowser.ShowDialog()
     if($status -eq "OK"){
         # hide window and show "please wait" message
@@ -112,14 +107,12 @@ function Start-Ation {
                 "Information")
         }
 
-        $fileType = $fileTypeBox.SelectedItem
-        if($fileTypeBox.SelectedItem -eq "all"){
-            $fileType = $fileTypeBox.Items
-        }
-
-        if($null -eq $fileTypeBox.SelectedItem){
-            $fileType = "*.mp3"
-        }
+        $items = $itemBox.Items
+        $selectedItem = $itemBox.SelectedItem
+        Write-Host "selected item: $selectedItem"
+        $fileType = $selectedItem
+        $fileType = if($selectedItem -eq "all") {$items}
+        $fileType = if($null -eq $selectedItem) {"*.mp3"}
 
         $data = Get-Bitrate $folderBrowser.SelectedPath $fileType $forceCheckBox.Checked | Where-Object {$_.Bitrate -ge $minKbpsBox.Text}  
         Stop-Job -Name $jobName
@@ -129,9 +122,9 @@ function Start-Ation {
             $data | Out-GridView -Title $title
             Save-Data $data $title
         } else {
-            [string] $message
-            if($fileTypeBox.SelectedItem -ne "All"){$message = "files not found!"}
-            else {$message = "$($fileTypeBox.SelectedItem) files not found!"}
+            [string] $message = if($fileTypeBox.SelectedItem -eq "all")  
+                {"files not found!"} else {"$($fileType) files not found!"}  
+
             [System.Windows.Forms.MessageBox]::Show(
                     $message,
                     $title, 
@@ -150,14 +143,10 @@ $searchButton.Font = New-Object System.Drawing.Font("Arial", 10)
 $searchButton.BackColor = "#e0e0e0"
 $searchButton.Size = New-Object System.Drawing.Size($searchButtonSize[0], $searchButtonSize[1])
 $searchButton.Location = New-Object System.Drawing.Point($searchButtonLocation[0], $searchButtonLocation[1])
-$searchButton.add_Click({
-    Start-Ation
-})
+$searchButton.add_Click({ Start-Ation $fileTypeBox })
 
 $minKbpsBox.Add_KeyPress({
-    if($_.KeyChar -eq 13){
-        Start-Ation
-    }
+    if($_.KeyChar -eq 13) { Start-Ation }
 })
 
 $form.Controls.Add($searchButton)
