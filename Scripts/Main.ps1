@@ -21,6 +21,7 @@ $checkBoxObj = [System.Windows.Forms.CheckBox]
 
 . "$PSScriptRoot\Get-Bitrate.ps1"
 . "$PSScriptRoot\Save-Data.ps1"
+. "$PSScriptRoot\Items.ps1"
 
 [int16] $winw = 300
 [int16] $winh = 120
@@ -73,16 +74,8 @@ $fileTypeBox.Font = New-Object System.Drawing.Font("Arial", 10)
 $fileTypeBox.Size = New-Object System.Drawing.Size($fileTypeBoxSize[0], $fileTypeBoxSize[1])
 $fileTypeBox.Location = New-Object System.Drawing.Point($fileTypeBoxLocation[0], $fileTypeBoxLocation[1])
 $fileTypeBox.Text = "*.mp3"
-$fileTypesRange = @("all",
-    "*.mp3", 
-    "*.m4a", 
-    "*.wav", 
-    "*.wma", 
-    "*.ogg", 
-    "*.flac", 
-    "*.aac", 
-    "*.aiff")
-foreach($fileType in $fileTypesRange) { $fileTypeBox.Items.Add($fileType) }
+$fileTypeBox.Items.Add("all")
+$fileTypeBox.Items.AddRange($items)
 $fileTypeBox.Add_SelectedValueChanged({
     $minKbpsBox.Maximum = if($fileTypeBox.SelectedItem -eq "*.mp3") {320} else {32768}
 })
@@ -107,14 +100,9 @@ function Start-Ation {
                 "Information")
         }
 
-        $items = $itemBox.Items
-        $selectedItem = $itemBox.SelectedItem
-        Write-Host "selected item: $selectedItem"
-        $fileType = $selectedItem
-        $fileType = if($selectedItem -eq "all") {$items}
-        $fileType = if($null -eq $selectedItem) {"*.mp3"}
+        $selectedItem = if($null -eq $fileTypeBox.SelectedItem) {"*.mp3"} else {$fileTypeBox.SelectedItem}
 
-        $data = Get-Bitrate $folderBrowser.SelectedPath $fileType $forceCheckBox.Checked | Where-Object {$_.Bitrate -ge $minKbpsBox.Text}  
+        $data = Get-Bitrate -Path $folderBrowser.SelectedPath -Type $selectedItem -Force $forceCheckBox.Checked | Where-Object {$_.Bitrate -ge $minKbpsBox.Text}  
         Stop-Job -Name $jobName
         Remove-Job -Name $jobName -Force
 
@@ -123,7 +111,7 @@ function Start-Ation {
             Save-Data $data $title
         } else {
             [string] $message = if($fileTypeBox.SelectedItem -eq "all")  
-                {"files not found!"} else {"$($fileType) files not found!"}  
+                {"files not found!"} else {"$($selectedItem) files not found!"}  
 
             [System.Windows.Forms.MessageBox]::Show(
                     $message,
