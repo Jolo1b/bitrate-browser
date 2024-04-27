@@ -20,8 +20,11 @@ function Save-Excel {
         $choise = [System.Windows.Forms.MessageBox]::Show($question, $title, "YesNo", "Question")
 
         if($choise -eq "Yes"){
-            Start-Process powershell -ArgumentList "[System.Console]::Title(`"don``t close this window!!!`") ; Install-Module ImportExcel -Force" -Verb RunAs -Wait
-            Save-File    
+            $arguments = "[System.Console]::Title = 'Installing dependencies' ;" +
+            " Install-Module ImportExcel -Force ; "
+            " Read-Host 'please close this window'"
+            Start-Process powershell -ArgumentList $arguments -Verb RunAs -Wait
+            Save-File
         }
     }
 }
