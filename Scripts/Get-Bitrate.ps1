@@ -1,23 +1,18 @@
 function Get-Bitrate {
-    param($pathToDir, $fileType, $force)
+    param($Path, $Type, $Force)
 
-    [string] $command = "Get-ChildItem -Recurse -Filter "
-    $AllMusicFiles = @()
-    if($fileType.GetType().Name -eq "ObjectCollection"){
-        foreach($type in $fileType){ $command += "$type " }
-    } else {
-        $command += "$fileType "
-    }
+    # building command
+    [string] $command = "Get-ChildItem -Path $Path\* -Recurse -ErrorAction Ignore -Include ("
+    $command += if($Type -eq "all") { 
+        foreach($item in $global:items) {"'$item',"} 
+    } else {"'$Type'"}
+    $command = $command.TrimEnd(", ") + ")" 
+    $command += if($Force) {"-Force"}
 
-    $command += if($force) {"-Force"}
-
-    Invoke-Expression "$command"
-    Write-Host $AllMusicFiles
-
-    if($null -eq $AllMusicFiles) {
-        return $null
-    }
+    $AllMusicFiles = Invoke-Expression "$command"
+    if($null -eq $AllMusicFiles) { return $null }
     
+    # setup shell
     $shell = New-Object -ComObject Shell.Application
     [int] $bitrateAttribute = 28
     $filesPropertyObject = @()
