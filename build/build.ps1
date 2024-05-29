@@ -9,6 +9,12 @@ if(-not (Test-Path "$PSScriptRoot\dist")) {
     New-Item "$PSScriptRoot\dist" -ItemType Directory
 }
 
+if(Test-Path "$PSScriptRoot\..\Assets\Icon.png") {
+    Remove-Item -ErrorAction Ignore "$PSScriptRoot\..\Assets\Icon.ico"
+    Write-Host $red"Creating icon..."$noColor
+    Write-Host "y" | ffmpeg -i "$PSScriptRoot\..\Assets\Icon.png" "$PSScriptRoot\..\Assets\Icon.ico"
+}
+
 "" | Out-file "$PSScriptRoot\dist\bitrate-browser.ps1"
 $mainFileContent = Get-Content "$PSScriptRoot\..\Scripts\Main.ps1"
 
