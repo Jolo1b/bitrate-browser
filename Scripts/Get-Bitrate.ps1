@@ -32,9 +32,14 @@ function Get-Bitrate {
             Bitrate = $bitrate;
             Size = $fileObject.Size;
             Extension = $file.Extension
-        }   
+        }
+
+        Remove-Variable -Force -Name dirObject
+        Remove-Variable -Force -Name fileObject
+        Remove-Variable -Force -Name bitrateStr
+        [System.GC]::Collect()
     }
 
+    [System.Runtime.Interopservices.Marshal]::ReleaseComObject($shell)
     return $filesPropertyObject
-    
 }
