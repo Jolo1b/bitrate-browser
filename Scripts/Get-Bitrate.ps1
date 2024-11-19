@@ -15,7 +15,7 @@ function Get-Bitrate {
     # setup shell
     $shell = New-Object -ComObject Shell.Application
     [int] $bitrateAttribute = 28
-    $filesPropertyObject = @()
+    $filesPropertyObject = [System.Collections.Generic.List[psobject]]::new()
 
     foreach($file in $AllMusicFiles){
         $dirObject = $shell.NameSpace($file.Directory.FullName)
@@ -26,13 +26,13 @@ function Get-Bitrate {
         if($bitrateStr -match "\d+") { [int] $bitrate = $Matches[0] }
         else { $bitrate = -1 }
 
-        $filesPropertyObject += New-Object -TypeName psobject -Property @{
+        $filesPropertyObject.Add((New-Object -TypeName psobject -Property @{
             Name = $file.Name;
             Path = $file.FullName;
             Bitrate = $bitrate;
             Size = $fileObject.Size;
             Extension = $file.Extension
-        }
+        }))
 
         Remove-Variable -Force -Name dirObject
         Remove-Variable -Force -Name fileObject
