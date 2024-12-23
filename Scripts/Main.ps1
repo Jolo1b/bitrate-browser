@@ -13,7 +13,7 @@ Add-Type @"
 
 $FormObj = [System.Windows.forms.Form]
 $LabelObj = [System.Windows.forms.Label]
-$ButtonlObj = [System.Windows.forms.Button]
+$ButtonObj = [System.Windows.forms.Button]
 $NumericBoxObj = [System.Windows.forms.NumericUpDown]
 $selectBoxObj = [System.Windows.forms.ComboBox]
 $GetDirectoryDialog = [System.Windows.Forms.FolderBrowserDialog]
@@ -83,7 +83,7 @@ $form.Controls.Add($fileTypeBox)
 
 $folderBrowser = New-Object $GetDirectoryDialog
 $folderBrowser.Description = "Select Folder"
-function Start-Ation {
+function Start-Action {
     param($itemBox)
     $status = $folderBrowser.ShowDialog()
     if($status -eq "OK"){
@@ -123,7 +123,7 @@ function Start-Ation {
     }
 }
 
-$searchButton = New-Object $ButtonlObj
+$searchButton = New-Object $ButtonObj
 $searchButtonSize = @(127, 40)
 $searchButtonLocation = @(($winw -  $margin_x - $searchButtonSize[0]), $margin_y)
 $searchButton.Text = "Select Folder"
@@ -131,10 +131,10 @@ $searchButton.Font = New-Object System.Drawing.Font("Arial", 10)
 $searchButton.BackColor = "#e0e0e0"
 $searchButton.Size = New-Object System.Drawing.Size($searchButtonSize[0], $searchButtonSize[1])
 $searchButton.Location = New-Object System.Drawing.Point($searchButtonLocation[0], $searchButtonLocation[1])
-$searchButton.add_Click({ Start-Ation $fileTypeBox })
+$searchButton.add_Click({ Start-Action $fileTypeBox })
 
 $minKbpsBox.Add_KeyPress({
-    if($_.KeyChar -eq 13) { Start-Ation }
+    if($_.KeyChar -eq 13) { Start-Action }
 })
 
 $form.Controls.Add($searchButton)

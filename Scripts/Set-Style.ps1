@@ -38,12 +38,12 @@ function Set-Style {
     $okButton.Size = New-Object System.Drawing.Size(80, 30)
     $okButton.Font = New-Object System.Drawing.Font("Arial", 10)
     $okButton.Add_Click({   
-        $selectedSyles = New-Object -TypeName psobject -Property @{
+        $selectedStyles = New-Object -TypeName psobject -Property @{
             Style = $selectStyle.SelectedItem
         }
         $form.Visible = $false
         $form.Close()       
-        Save-Excel $data $path $selectedSyles
+        Save-Excel $data $path $selectedStyles
     })
     $form.Controls.Add($okButton)
 

@@ -17,9 +17,9 @@ function Save-Excel {
         [string] $question = "Do you want to install ImportExcel right now from PSGallery?"
 
         [System.Windows.Forms.MessageBox]::Show($message, $title, "Ok", "Error")
-        $choise = [System.Windows.Forms.MessageBox]::Show($question, $title, "YesNo", "Question")
+        $Choice = [System.Windows.Forms.MessageBox]::Show($question, $title, "YesNo", "Question")
 
-        if($choise -eq "Yes"){
+        if($Choice -eq "Yes"){
             $arguments = "[System.Console]::Title = 'Installing dependencies' ;" +
             " Install-Module ImportExcel -Force ; "
             " Read-Host 'please close this window'"
